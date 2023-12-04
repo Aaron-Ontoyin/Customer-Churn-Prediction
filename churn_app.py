@@ -63,6 +63,10 @@ def app() -> None:
     Streamlit application for predicting customer churn.
     """
     st.title("Predict Customer Churn")
+    st.write(
+        "This is a simple app to predict customer churn. "
+        "The data was gotten from [Kaggle](https://www.kaggle.com/blastchar/telco-customer-churn)."
+    )
     # Choose precission, recall or balance
     st.sidebar.subheader("Choose Priority Score")
     priority_score = st.sidebar.selectbox(
