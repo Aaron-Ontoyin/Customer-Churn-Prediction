@@ -8,12 +8,6 @@ import pandas as pd
 from classes import MyXGBInvestigator
 
 
-# The base directory for this project is not '.' but the location where the virtual environment is stored, as it is shared with other projects.
-model_dict_path: str = os.path.join(
-    os.path.dirname(__file__), "customer_churn_xgb_model_dict.pkl"
-)
-model_dict: dict = joblib.load(model_dict_path)
-
 encode_dict: dict = {
     "Female": 0,
     "Male": 1,
@@ -69,8 +63,42 @@ def app() -> None:
     Streamlit application for predicting customer churn.
     """
     st.title("Predict Customer Churn")
-    droped_columns = model_dict["dropped_columns"]
-    st.info(f"Do not bother about {droped_columns}. They would be dropped!")
+    # Choose precission, recall or balance
+    st.sidebar.subheader("Choose Priority Score")
+    priority_score = st.sidebar.selectbox(
+        "Choose Priority Score", ["Precision", "Recall", "Balance"]
+    )
+    # Describe what the chosen priority score means
+    if priority_score == "Precision":
+        st.sidebar.write(
+            "Precision is a measure of the accuracy of a classification model. "
+            "It quantifies the proportion of correctly predicted positive instances out of the total instances predicted as positive. "
+            "In simpler terms, precision tells us how well the model performs in correctly identifying positive cases. "
+            "A high precision value indicates a low false positive rate, meaning that the model is good at avoiding false alarms."
+            "\n This choice makes the model have a high precission, this is at the expense of recall!"
+        )
+    elif priority_score == "Recall":
+        st.sidebar.write(
+            "Recall (sensitivity) is a measure of the completeness of a classification model. "
+            "It quantifies the proportion of correctly predicted positive instances out of all the actual positive instances. "
+            "In simpler terms, recall tells us how well the model is able to identify all the positive cases. "
+            "A high recall value indicates a low false negative rate, meaning that the model is good at avoiding false negatives."
+            "\n This choice makes the model have a high recall, this is at the expense of precission!"
+        )
+    elif priority_score == "Balance":
+        st.sidebar.write(
+            "This choice makes the model have a balance between precission and recall!"
+        )
+
+    # The base directory for this project is not '.' but the location where the virtual environment is stored, as it is shared with other projects.
+    model_dict_path: str = os.path.join(
+        os.path.dirname(__file__), f"model_dict_{priority_score.lower()}.pkl"
+    )
+    model_dict: dict = joblib.load(model_dict_path)
+
+    dropped_columns = model_dict["dropped_columns"]
+    if dropped_columns:
+        st.info(f"Do not bother about {dropped_columns}. They would be dropped!")
 
     col1, col2, col3 = st.columns(3)
     with col1:

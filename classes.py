@@ -1,3 +1,17 @@
+"""
+This module contains the definition of the 'Investigator' classes and related methods for analyzing customer churn prediction.
+
+Classes:
+- `MyInvestigator`: Represents an investigator for analyzing customer churn prediction.
+Provides methods for training and evaluating machine learning models on a given dataset. This is the Base class.
+- `MyLogisticInvestigator`: Represents an investigator for analyzing customer churn prediction using Logistic Regression.
+- `MySVMInvestigator`: Represents an investigator for analyzing customer churn prediction using Support Vector Machine (SVM).
+- `MyForestInvestigator`: Represents an investigator for analyzing customer churn prediction using Random Forest.
+- `MyBayesInvestigator`: Represents an investigator for analyzing customer churn prediction using Naive Bayes.
+- `MyKNNInvestigator`: Represents an investigator for analyzing customer churn prediction using K-Nearest Neighbors (KNN).
+- `MyXGBInvestigator`: Represents an investigator for analyzing customer churn prediction using XGBoost.
+"""
+
 from typing import Any, Dict, List, Optional, Tuple, Union
 import pandas as pd
 import numpy as np
@@ -21,41 +35,45 @@ import matplotlib.pyplot as plt
 
 
 class MyInvestigator:
-    import pandas as pd
-    from typing import Optional, Any, List
-    from sklearn.model_selection import train_test_split
-    from sklearn.preprocessing import StandardScaler
+    """
+    Represents an investigator for analyzing customer churn prediction.
+    Provides methods for training and evaluating machine learning models on a given dataset.
 
-    class MyInvestigator:
-        def __init__(
-            self,
-            X: pd.DataFrame,
-            y: pd.Series,
-            test_size: float = 0.2
-        ) -> None:
-            """
-            Initialize MyInvestigator object.
+    Methods:
+    - __init__: Initialize MyInvestigator object.
+    - drop: Drop columns from the input DataFrame.
+    - evaluate_model: Evaluate the performance of a model.
+    - SMOT: Perform Synthetic Minority Over-sampling Technique (SMOTE) on the data.
+    - ROS: Perform Random Over-sampling (ROS) on the data.
+    - RUS: Perform Random Under-sampling (RUS) on the data.
+    - print_report: Print the report dictionary.
+    - _investigate: Perform investigation on the data.
+    """
 
-            MyInvestigator is a class that represents an investigator for analyzing customer churn prediction.
-            It provides methods for training and evaluating machine learning models on a given dataset.
-            This is the Base Class from which different model types Investigator classes would inherit.
+    def __init__(self, X: pd.DataFrame, y: pd.Series, test_size: float = 0.2) -> None:
+        """
+        Initialize MyInvestigator object.
 
-            Args:
-                X (pd.DataFrame): Input features.
-                y (pd.Series): Target variable.
-                test_size (float, optional): Proportion of the dataset to include in the test split.
-                    Defaults to 0.2.
-            """
-            self.model_class: Optional[Any] = None
-            self.scaler: Optional[StandardScaler] = None
-            self.drop_columns: Optional[List[str]] = None
-            self.X_train: pd.DataFrame
-            self.X_val: pd.DataFrame
-            self.y_train: pd.Series
-            self.y_val: pd.Series
-            self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(
-                X, y, test_size=test_size, random_state=11
-            )
+        MyInvestigator is a class that represents an investigator for analyzing customer churn prediction.
+        It provides methods for training and evaluating machine learning models on a given dataset.
+        This is the Base Class from which different model types Investigator classes would inherit.
+
+        Args:
+            X (pd.DataFrame): Input features.
+            y (pd.Series): Target variable.
+            test_size (float, optional): Proportion of the dataset to include in the test split.
+                Defaults to 0.2.
+        """
+        self.model_class: Optional[Any] = None
+        self.scaler: Optional[StandardScaler] = None
+        self.drop_columns: Optional[List[str]] = None
+        self.X_train: pd.DataFrame
+        self.X_val: pd.DataFrame
+        self.y_train: pd.Series
+        self.y_val: pd.Series
+        self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(
+            X, y, test_size=test_size, random_state=11
+        )
 
     def drop(self, X: pd.DataFrame) -> pd.DataFrame:
         """
@@ -73,9 +91,7 @@ class MyInvestigator:
 
     @staticmethod
     def evaluate_model(
-        model: Any,
-        X_val: pd.DataFrame,
-        y_val: pd.Series
+        model: Any, X_val: pd.DataFrame, y_val: pd.Series
     ) -> Tuple[pd.DataFrame, Optional[plt.Figure]]:
         """
         Evaluate the performance of a model.
@@ -133,7 +149,7 @@ class MyInvestigator:
         return metrics, fig
 
     @staticmethod
-    def SMOT(X: pd.DataFrame, y: pd.Series) -> Tuple[pd.DataFrame, pd.Series]:
+    def SMOTE(X: pd.DataFrame, y: pd.Series) -> Tuple[pd.DataFrame, pd.Series]:
         """
         Perform Synthetic Minority Over-sampling Technique (SMOTE) on the data.
 
@@ -315,6 +331,10 @@ from sklearn.linear_model import LogisticRegression
 
 
 class MyLogisticInvestigator(MyInvestigator):
+    """
+    Represents an investigator for analyzing customer churn prediction using Logistic Regression.
+    """
+
     def __init__(self, X, y, test_size=0.2) -> None:
         """
         Initialize MyLogisticInvestigator object.
@@ -391,6 +411,10 @@ from sklearn import svm
 
 
 class MySVMInvestigator(MyInvestigator):
+    """
+    Represents an investigator for analyzing customer churn prediction using Support Vector Machine (SVM).
+    """
+
     def __init__(self, X, y, test_size=0.2) -> None:
         """
         Initialize MySVMInvestigator object.
@@ -477,6 +501,10 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 class MyForestInvestigator(MyInvestigator):
+    """
+    Represents an investigator for analyzing customer churn prediction using Random Forest.
+    """
+
     def __init__(self, X, y, test_size=0.2) -> None:
         """
         Initialize the MyForestInvestigator class.
@@ -564,6 +592,10 @@ from sklearn.naive_bayes import GaussianNB, MultinomialNB
 
 
 class MyBayesInvestigator(MyInvestigator):
+    """
+    Represents an investigator for analyzing customer churn prediction using Naive Bayes.
+    """
+
     def __init__(self, X, y, test_size=0.2, type: str = "gaussian") -> None:
         """
         Initialize MyBayesInvestigator object.
@@ -640,6 +672,10 @@ from sklearn.neighbors import KNeighborsClassifier
 
 
 class MyKNNInvestigator(MyInvestigator):
+    """
+    Represents an investigator for analyzing customer churn prediction using K-Nearest Neighbors (KNN).
+    """
+
     def __init__(self, X, y, test_size=0.2) -> None:
         """
         Initialize the MyKNNInvestigator class.
@@ -707,6 +743,10 @@ from xgboost import XGBClassifier
 
 
 class MyXGBInvestigator(MyInvestigator):
+    """
+    Represents an investigator for analyzing customer churn prediction using XGBoost.
+    """
+
     def __init__(self, X: np.ndarray, y: np.ndarray, test_size: float = 0.2) -> None:
         """
         Initialize the MyXGBInvestigator class.
